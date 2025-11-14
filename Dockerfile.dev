@@ -1,0 +1,19 @@
+FROM node:20-alpine
+
+WORKDIR /usr/src/app
+
+# Copiar solo los archivos de manifiesto primero
+COPY package.json package-lock.json ./
+
+# Instalar todas las dependencias
+RUN npm ci
+
+# Copiar el resto del código
+# (En la práctica, esto será reemplazado por un volumen de Docker Compose)
+COPY . .
+
+# Exponer el puerto de desarrollo
+EXPOSE 3000
+
+# Comando para iniciar en modo "watch" (hot-reloading)
+CMD ["npm", "run", "start:dev"]

@@ -1,0 +1,26 @@
+version: '3.8'
+services:
+  # Este es el nombre de tu servicio (puedes llamarlo 'app', 'api', etc.)
+  api:
+    build:
+      # 'context: .' le dice a Docker que construya desde el directorio actual
+      context: .
+      # Especifica qué Dockerfile usar (el de desarrollo)
+      dockerfile: Dockerfile.dev
+    volumes:
+      # 1. Monta tu código local en el contenedor.
+      #    Esto permite que los cambios en tu editor se reflejen DENTRO del contenedor.
+      - .:/usr/src/app
+
+      # 2. Truco importante:
+      #    Evita que tu 'node_modules' local (si existe) sobreescriba
+      #    el 'node_modules' que se instaló DENTRO del contenedor.
+      - /usr/src/app/node_modules
+    ports:
+      # Mapea el puerto 3000 de tu máquina al puerto 3000 del contenedor
+      - "3000:3000"
+    environment:
+      # Aquí puedes definir variables de entorno para desarrollo
+      - NODE_ENV=development
+      # Ejemplo si tuvieras una base de datos:
+      # - DATABASE_URL=mongodb://mongo:27017/mi_db
